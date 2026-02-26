@@ -144,9 +144,14 @@ export default function HomePage() {
           display: flex;
           flex-direction: column;
           align-items: center;
-          gap: 2.5rem;
-          padding: 6rem 1.5rem 4rem;
+          gap: 2rem;
+          padding: 5rem 1.5rem 3rem;
           text-align: center;
+        }
+
+        /* Min height only on tablet+ */
+        @media (min-width: 768px) {
+          section.hero-section { min-height: 100vh; }
         }
 
         /* Tablet+ → side-by-side */
@@ -283,7 +288,7 @@ export default function HomePage() {
       <main style={{ backgroundColor: "#0f0f0f", color: "#ededed", minHeight: "100vh", position: "relative", zIndex: 1 }}>
 
         {/* ══════ HERO ══════ */}
-        <section className="relative min-h-screen overflow-hidden">
+        <section className="hero-section relative overflow-hidden">
 
           {/* LiquidEther background */}
           <div aria-hidden style={{ position: "absolute", inset: 0, zIndex: 0 }}>
@@ -326,8 +331,7 @@ export default function HomePage() {
                 <span style={{ color: "#ededed", textDecoration: "underline", textUnderlineOffset: 3 }}>
                   Informatics Engineering
                 </span>
-                <span className="w-5 h-5 rounded flex items-center justify-center text-xs flex-shrink-0"
-                  style={{ backgroundColor: "rgba(255,255,255,0.12)" }}>✦</span>
+
               </div>
 
               {/* Headline */}
@@ -346,12 +350,12 @@ export default function HomePage() {
               </h1>
 
               {/* Body */}
-              <p className="mb-10 leading-relaxed" style={{
+              <p className="mb-8 leading-relaxed" style={{
                 ...g,
                 fontSize: "1rem",
                 color: "rgba(255,255,255,0.55)",
                 maxWidth: 400,
-                margin: "0 auto 2.5rem",
+                margin: "0 auto 2rem 0",
                 animation: "fadeUp 0.6s ease 0.3s both",
               }}>
                 Informatics student passionate about data science and software development,
