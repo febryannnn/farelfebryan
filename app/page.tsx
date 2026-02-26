@@ -6,11 +6,10 @@ import { Github, Twitter, Linkedin, Mail, ArrowDown } from "lucide-react";
 import ProfileCard from '@/components/ProfileCard';
 import '@/components/ProfileCard.css';
 import { FaCode } from "react-icons/fa";
-import LiquidEther from '@/components/LiquidEther'; // adjust path to where you placed the component
+import LiquidEther from '@/components/LiquidEther';
 
 const g = { fontFamily: "var(--font-geist), sans-serif" } as const;
 const gm = { fontFamily: "var(--font-geist-mono), monospace" } as const;
-const gs = { fontFamily: "var(--font-script), cursive" } as const;
 
 /* ─── Cursor glow ─── */
 function CursorGlow() {
@@ -25,7 +24,7 @@ function CursorGlow() {
     return () => window.removeEventListener("mousemove", move);
   }, []);
   return (
-    <div ref={ref} className="pointer-events-none fixed z-0"
+    <div ref={ref} className="pointer-events-none fixed z-0 hidden md:block"
       style={{
         width: 500, height: 500, borderRadius: "50%", transform: "translate(-50%,-50%)",
         background: "radial-gradient(circle, rgba(255,255,255,0.028) 0%, transparent 70%)",
@@ -58,35 +57,6 @@ function FadeIn({ children, delay = 0, className = "", style = {} }: {
       {children}
     </div>
   );
-}
-
-/* ─── Animated counter ─── */
-function Counter({ target }: { target: string }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const [started, setStarted] = useState(false);
-  const num = parseInt(target.replace(/\D/g, ""));
-  const suffix = target.replace(/[0-9]/g, "");
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { setStarted(true); obs.disconnect(); } },
-      { threshold: 0.5 }
-    );
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, []);
-  useEffect(() => {
-    if (!started || !ref.current) return;
-    let start = 0;
-    const step = (ts: number) => {
-      if (!start) start = ts;
-      const p = Math.min((ts - start) / 1200, 1);
-      const e = 1 - Math.pow(1 - p, 3);
-      if (ref.current) ref.current.textContent = Math.floor(e * num) + suffix;
-      if (p < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }, [started, num, suffix]);
-  return <span ref={ref}>0{suffix}</span>;
 }
 
 /* ─── Typewriter ─── */
@@ -135,6 +105,7 @@ function MagneticBtn({ children, href, primary }: { children: React.ReactNode; h
         border: `1px solid ${primary ? "rgba(255,255,255,0.14)" : "rgba(255,255,255,0.08)"}`,
         color: primary ? "#fff" : "rgba(255,255,255,0.45)",
         backdropFilter: "blur(8px)",
+        whiteSpace: "nowrap",
       }}>
       {children}
     </Link>
@@ -142,12 +113,6 @@ function MagneticBtn({ children, href, primary }: { children: React.ReactNode; h
 }
 
 /* ─── Data ─── */
-const stats = [
-  { num: "3+", label: "Years of experience" },
-  { num: "24+", label: "Projects completed" },
-  { num: "12+", label: "Happy clients" },
-  { num: "99%", label: "Satisfaction rate" },
-];
 const services = [
   {
     title: "Machine Learning",
@@ -162,48 +127,166 @@ const services = [
     desc: "Developing responsive and efficient web applications using modern frameworks with clean architecture and scalable backend systems."
   },
 ];
-const skills = [
-  "Next.js", "React", "TypeScript", "Node.js", "PostgreSQL",
-  "Prisma", "Tailwind CSS", "shadcn/ui", "GraphQL", "Docker", "AWS", "Figma",
-];
 
 /* ─── Page ─── */
 export default function HomePage() {
   return (
     <>
       <style>{`
-        @keyframes float { from { transform: translateY(0); } to { transform: translateY(-10px); } }
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
         @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes spin { from{transform:translate(-50%,-50%) rotate(0deg)} to{transform:translate(-50%,-50%) rotate(360deg)} }
+
+        /* ── Hero layout ── */
+        .hero-inner {
+          position: relative;
+          z-index: 10;
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 2.5rem;
+          padding: 6rem 1.5rem 4rem;
+          text-align: center;
+        }
+
+        /* Tablet+ → side-by-side */
+        @media (min-width: 768px) {
+          .hero-inner {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left;
+            padding: 6rem 4rem 4rem;
+            gap: 2rem;
+          }
+        }
+
+        /* Desktop */
+        @media (min-width: 1024px) {
+          .hero-inner {
+            padding: 6rem 6rem 4rem;
+          }
+        }
+
+        /* Text block */
+        .hero-text {
+          flex-shrink: 0;
+          max-width: 100%;
+        }
+        @media (min-width: 768px) {
+          .hero-text {
+            max-width: 440px;
+          }
+        }
+        @media (min-width: 1024px) {
+          .hero-text {
+            max-width: 520px;
+          }
+        }
+
+        /* Badge centering on mobile */
+        .hero-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.625rem;
+          padding: 0.5rem 1rem;
+          border-radius: 999px;
+          font-size: 0.75rem;
+          margin-bottom: 1.75rem;
+          background-color: rgba(255,255,255,0.07);
+          border: 1px solid rgba(255,255,255,0.13);
+          backdrop-filter: blur(16px);
+          color: rgba(255,255,255,0.65);
+          animation: fadeUp 0.6s ease both;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+        @media (min-width: 768px) {
+          .hero-badge {
+            flex-wrap: nowrap;
+            justify-content: flex-start;
+          }
+        }
+
+        /* CTA buttons */
+        .hero-ctas {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          margin-bottom: 3rem;
+          animation: fadeUp 0.6s ease 0.45s both;
+          justify-content: center;
+          flex-wrap: wrap;
+        }
+        @media (min-width: 768px) {
+          .hero-ctas { justify-content: flex-start; }
+        }
+
+        /* Social icons */
+        .hero-socials {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          animation: fadeUp 0.6s ease 0.6s both;
+          justify-content: center;
+        }
+        @media (min-width: 768px) {
+          .hero-socials { justify-content: flex-start; }
+        }
+
+        /* ProfileCard wrapper – hidden on small mobile, shown md+ */
+        .hero-card {
+          display: none;
+          flex: 0 0 auto;
+          animation: fadeUp 0.8s ease 0.3s both;
+        }
+        @media (min-width: 768px) {
+          .hero-card {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+        }
+
+        /* Services grid */
+        .services-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 1px;
+          background-color: rgba(255,255,255,0.06);
+        }
+        @media (min-width: 640px) {
+          .services-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+        @media (min-width: 1024px) {
+          .services-grid {
+            grid-template-columns: repeat(3, 1fr);
+          }
+        }
+
+        /* Section padding helper */
+        .section-pad {
+          padding: 4rem 1.5rem;
+        }
+        @media (min-width: 768px) {
+          .section-pad { padding: 5rem 4rem; }
+        }
+        @media (min-width: 1024px) {
+          .section-pad { padding: 6rem 6rem; }
+        }
       `}</style>
 
       <CursorGlow />
 
       <main style={{ backgroundColor: "#0f0f0f", color: "#ededed", minHeight: "100vh", position: "relative", zIndex: 1 }}>
 
-        {/* ══════════════════════════════════════
-            HERO
-        ══════════════════════════════════════ */}
-        <section
-          className="relative min-h-screen overflow-hidden px-8 md:px-16 lg:px-24 pt-24"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: "2rem",
-          }}
-        >
-          {/* ── LiquidEther — pinned full-bleed behind everything ── */}
-          <div
-            aria-hidden
-            style={{
-              position: "absolute",
-              inset: 0,
-              zIndex: 0,
-              // LiquidEther renders its own <canvas> that fills the container
-            }}
-          >
+        {/* ══════ HERO ══════ */}
+        <section className="relative min-h-screen overflow-hidden">
+
+          {/* LiquidEther background */}
+          <div aria-hidden style={{ position: "absolute", inset: 0, zIndex: 0 }}>
             <LiquidEther
               colors={['#ffffff', '#cccccc', '#888888']}
               mouseForce={20}
@@ -223,138 +306,127 @@ export default function HomePage() {
             />
           </div>
 
-          {/* Radial vignette — keeps edges dark so text stays readable */}
-          <div
-            aria-hidden
-            style={{
-              position: "absolute",
-              inset: 0,
-              zIndex: 1,
-              background:
-                "radial-gradient(ellipse 90% 90% at 50% 50%, rgba(15,15,15,0.15) 0%, rgba(15,15,15,0.70) 65%, rgba(15,15,15,0.92) 100%)",
-              pointerEvents: "none",
-            }}
-          />
+          {/* Vignette */}
+          <div aria-hidden style={{
+            position: "absolute", inset: 0, zIndex: 1,
+            background: "radial-gradient(ellipse 90% 90% at 50% 50%, rgba(15,15,15,0.15) 0%, rgba(15,15,15,0.70) 65%, rgba(15,15,15,0.92) 100%)",
+            pointerEvents: "none",
+          }} />
 
-          {/* Left: text content */}
-          <div className="relative z-10 max-w-lg mx-20" style={{ flexShrink: 0 }}>
-            {/* Badge */}
-            <div
-              className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full mb-10 text-sm"
-              style={{
-                ...g,
-                backgroundColor: "rgba(255,255,255,0.07)",
-                border: "1px solid rgba(255,255,255,0.13)",
-                backdropFilter: "blur(16px)",
-                color: "rgba(255,255,255,0.65)",
-                animation: "fadeUp 0.6s ease both",
-              }}
-            >
-              <span className="w-2 h-2 rounded-full bg-emerald-400" style={{ boxShadow: "0 0 6px #4ade80" }} />
-              Creating Experiences at{" "}
-              <span style={{ color: "#ededed", textDecoration: "underline", textUnderlineOffset: 3 }}>Informatics Engineering</span>
-              <span
-                className="w-5 h-5 rounded flex items-center justify-center text-xs"
-                style={{ backgroundColor: "rgba(255,255,255,0.12)" }}
-              >✦</span>
-            </div>
+          {/* Content row */}
+          <div className="hero-inner">
 
-            {/* Headline */}
-            <h1
-              className="font-bold text-white leading-[1.05] mb-6"
-              style={{ ...g, fontSize: "clamp(3rem,6vw,5rem)", animation: "fadeUp 0.6s ease 0.15s both" }}
-            >
-              I&apos;m Farel Febryan<br />
-              <span style={{ color: "rgba(255,255,255,0.55)" }}>
-                <Typewriter texts={["C28.", "a learner.", "a student.", "TC'24."]} />
-              </span>
-            </h1>
+            {/* Left: text */}
+            <div className="hero-text">
 
-            {/* Body */}
-            <p
-              className="mb-10 leading-relaxed"
-              style={{
+              {/* Badge */}
+              <div className="hero-badge" style={g}>
+                <span className="w-2 h-2 rounded-full bg-emerald-400 flex-shrink-0" style={{ boxShadow: "0 0 6px #4ade80" }} />
+                Creating Experiences at{" "}
+                <span style={{ color: "#ededed", textDecoration: "underline", textUnderlineOffset: 3 }}>
+                  Informatics Engineering
+                </span>
+                <span className="w-5 h-5 rounded flex items-center justify-center text-xs flex-shrink-0"
+                  style={{ backgroundColor: "rgba(255,255,255,0.12)" }}>✦</span>
+              </div>
+
+              {/* Headline */}
+              <h1
+                className="font-bold text-white leading-[1.05] mb-6"
+                style={{
+                  ...g,
+                  fontSize: "clamp(2.2rem, 6vw, 5rem)",
+                  animation: "fadeUp 0.6s ease 0.15s both",
+                }}
+              >
+                I&apos;m Farel Febryan<br />
+                <span style={{ color: "rgba(255,255,255,0.55)" }}>
+                  <Typewriter texts={["C28.", "a learner.", "a student.", "TC'24."]} />
+                </span>
+              </h1>
+
+              {/* Body */}
+              <p className="mb-10 leading-relaxed" style={{
                 ...g,
                 fontSize: "1rem",
                 color: "rgba(255,255,255,0.55)",
                 maxWidth: 400,
+                margin: "0 auto 2.5rem",
                 animation: "fadeUp 0.6s ease 0.3s both",
-              }}
-            >
-              Informatics student passionate about data science and software development, driven to build impactful, data-driven applications.
-            </p>
+              }}>
+                Informatics student passionate about data science and software development,
+                driven to build impactful, data-driven applications.
+              </p>
 
-            {/* Buttons */}
-            <div className="flex items-center gap-3 mb-12" style={{ animation: "fadeUp 0.6s ease 0.45s both" }}>
-              <MagneticBtn href="/projects" primary>View Projects <ArrowDown className="w-4 h-4" /></MagneticBtn>
-              <MagneticBtn href="/about">More about me</MagneticBtn>
+              {/* Buttons */}
+              <div className="hero-ctas">
+                <MagneticBtn href="/projects" primary>View Projects <ArrowDown className="w-4 h-4" /></MagneticBtn>
+                <MagneticBtn href="/about">More about me</MagneticBtn>
+              </div>
+
+              {/* Socials */}
+              <div className="hero-socials">
+                {[
+                  { icon: <Github className="w-5 h-5" />, href: "https://github.com" },
+                  { icon: <Twitter className="w-5 h-5" />, href: "https://x.com" },
+                  { icon: <Linkedin className="w-5 h-5" />, href: "https://linkedin.com" },
+                  { icon: <Mail className="w-5 h-5" />, href: "mailto:farel@dev.id" },
+                ].map((s, i) => (
+                  <a key={i} href={s.href} target="_blank" rel="noopener noreferrer"
+                    className="transition-all hover:text-white hover:scale-110"
+                    style={{ color: "rgba(255,255,255,0.4)" }}>
+                    {s.icon}
+                  </a>
+                ))}
+              </div>
             </div>
 
-            {/* Socials */}
-            <div className="flex items-center gap-4" style={{ animation: "fadeUp 0.6s ease 0.6s both" }}>
-              {[
-                { icon: <Github className="w-5 h-5" />, href: "https://github.com" },
-                { icon: <Twitter className="w-5 h-5" />, href: "https://x.com" },
-                { icon: <Linkedin className="w-5 h-5" />, href: "https://linkedin.com" },
-                { icon: <Mail className="w-5 h-5" />, href: "mailto:farel@dev.id" },
-              ].map((s, i) => (
-                <a
-                  key={i}
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="transition-all hover:text-white hover:scale-110"
-                  style={{ color: "rgba(255,255,255,0.4)" }}
-                >
-                  {s.icon}
-                </a>
-              ))}
+            {/* Right: ProfileCard */}
+            <div className="hero-card">
+              <ProfileCard
+                name="Farel Febryan"
+                title={
+                  <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <FaCode />
+                    Informatics Student
+                  </span>
+                }
+                handle="javicodes"
+                status="Online"
+                contactText="Contact Me"
+                avatarUrl="/profile.jpeg"
+                showUserInfo
+                enableTilt={true}
+                enableMobileTilt={false}
+                onContactClick={() => console.log('Contact clicked')}
+                behindGlowColor="rgba(125, 190, 255, 0.67)"
+                iconUrl="/profile.jpg"
+                grainUrl="./grain.jpg"
+                behindGlowEnabled
+                innerGradient="linear-gradient(145deg,#60496e8c 0%,#71C4FF44 100%)"
+              />
             </div>
-          </div>
-
-          {/* Right: Profile Card */}
-          <div
-            className="relative z-10 hidden md:flex items-center justify-center mx-20"
-            style={{
-              flex: "0 0 auto",
-              animation: "fadeUp 0.8s ease 0.3s both",
-            }}
-          >
-            <ProfileCard
-              name="Farel Febryan"
-              title={
-                <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <FaCode />
-                  Informatics Student
-                </span>
-              }
-              handle="javicodes"
-              status="Online"
-              contactText="Contact Me"
-              avatarUrl="/profile.jpeg"
-              showUserInfo
-              enableTilt={true}
-              enableMobileTilt={false}
-              onContactClick={() => console.log('Contact clicked')}
-              behindGlowColor="rgba(125, 190, 255, 0.67)"
-              iconUrl="/profile.jpg"
-              grainUrl="./grain.jpg"
-              behindGlowEnabled
-              innerGradient="linear-gradient(145deg,#60496e8c 0%,#71C4FF44 100%)"
-            />
           </div>
         </section>
 
         <div style={{ height: 1, backgroundColor: "rgba(255,255,255,0.06)" }} />
 
-        {/* ── SERVICES ── */}
-        <section className="px-8 md:px-16 lg:px-24 py-24" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-          <FadeIn><p className="text-xs tracking-[0.25em] uppercase mb-12" style={{ ...gm, color: "rgba(255,255,255,0.25)" }}>What I Do</p></FadeIn>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-px" style={{ backgroundColor: "rgba(255,255,255,0.06)" }}>
+        {/* ══════ SERVICES ══════ */}
+        <section className="section-pad" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+          <FadeIn>
+            <p className="text-xs tracking-[0.25em] uppercase mb-10"
+              style={{ ...gm, color: "rgba(255,255,255,0.25)" }}>
+              What I Do
+            </p>
+          </FadeIn>
+
+          <div className="services-grid">
             {services.map((svc, i) => (
               <FadeIn key={i} delay={i * 120}>
-                <div className="p-8 hover:bg-white/[0.025] transition-all duration-200 hover:-translate-y-0.5 h-full"
-                  style={{ backgroundColor: "#0f0f0f" }}>
+                <div
+                  className="p-6 md:p-8 hover:bg-white/[0.025] transition-all duration-200 hover:-translate-y-0.5 h-full"
+                  style={{ backgroundColor: "#0f0f0f" }}
+                >
                   <p className="text-xs mb-5" style={{ ...gm, color: "rgba(255,255,255,0.18)" }}>0{i + 1}</p>
                   <h3 className="font-semibold text-white text-lg mb-3" style={g}>{svc.title}</h3>
                   <p className="text-sm leading-relaxed" style={{ ...g, color: "rgba(255,255,255,0.38)" }}>{svc.desc}</p>
@@ -364,11 +436,21 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ── FOOTER ── */}
-        <footer className="px-8 md:px-16 lg:px-24 py-6 flex flex-col sm:flex-row items-center justify-between gap-2"
-          style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-          <p style={{ ...gm, fontSize: "11px", color: "rgba(255,255,255,0.18)" }}>© 2024 Farel Febryan · Built with Next.js</p>
-          <p style={{ ...gm, fontSize: "11px", color: "rgba(255,255,255,0.18)" }}>Made with precision ✦</p>
+        {/* ══════ FOOTER ══════ */}
+        <footer
+          className="section-pad flex flex-col sm:flex-row items-center justify-between gap-3"
+          style={{
+            borderTop: "1px solid rgba(255,255,255,0.06)",
+            paddingTop: "1.5rem",
+            paddingBottom: "1.5rem",
+          }}
+        >
+          <p style={{ ...gm, fontSize: "11px", color: "rgba(255,255,255,0.18)" }}>
+            © 2024 Farel Febryan · Built with Next.js
+          </p>
+          <p style={{ ...gm, fontSize: "11px", color: "rgba(255,255,255,0.18)" }}>
+            Made with precision ✦
+          </p>
         </footer>
       </main>
     </>
