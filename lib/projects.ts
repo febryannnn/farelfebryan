@@ -66,7 +66,7 @@ export const projects: Project[] = [
             { metric: "Macro F1", baseline: 0.8200, best: 0.8409, experiment: "SDXL" },
             { metric: "Accuracy", baseline: 0.8750, best: 0.8870, experiment: "SD 3.5" },
         ],
-        architecture: "/diagrams/dermadiff-pipeline.png",
+        architecture: "/dermadiff-arch.png",
         challenges: [
             "Inverted flow matching formula in SD 3.5 custom training loop caused silent training failure — caught only after analyzing generated outputs.",
             "PEFT format incompatibility between training and inference required switching to native PeftModel loading pattern via PeftModel.from_pretrained().",
@@ -177,7 +177,7 @@ export const projects: Project[] = [
         tags: ["Python", "Genetic-Algorithm", "Simulated Annealing", "Tabu-Search"],
         year: "2025",
         views: "1,244",
-        image: "/kka.png",
+        image: ["/ai-2.png", "/kka.png", '/ai-1.png'],
         longDesc: "A full-stack web application for solving the Heterogeneous Fixed Fleet Capacitated Vehicle Routing Problem (HFFCVRP) using metaheuristic optimization algorithms. The system compares multiple approaches including Genetic Algorithm, Simulated Annealing, Tabu Search, and a novel Hybrid Firefly–Genetic algorithm to find cost-optimal delivery routes under vehicle capacity constraints.",
         problem: "Logistics companies need to optimize delivery routes across heterogeneous vehicle fleets with varying capacities and costs. Traditional exact methods become computationally intractable for real-world problem sizes.",
         features: [
@@ -202,7 +202,7 @@ export const projects: Project[] = [
         tags: ["Next.js", "TypeScript", "Tailwind CSS"],
         year: "2026",
         views: "8,421",
-        image: "/property.png",
+        image: ["/property.png", "/daftar.png", "/login.png", "/dashboard.png"],
         longDesc: "A full-featured real estate platform built with Next.js App Router featuring server-side rendering, dynamic property detail pages, advanced multi-criteria search with filtering by price, location, property type, and amenities. Includes interactive map integration for location-based browsing, responsive image galleries, and performance optimization with ISR and image lazy loading.",
         problem: "Traditional property listing sites suffer from slow page loads, poor mobile experience, and limited search capabilities that frustrate potential buyers browsing hundreds of listings.",
         features: [
@@ -224,7 +224,7 @@ export const projects: Project[] = [
         tags: ["Vite", "React"],
         year: "2025",
         views: "5,203",
-        image: "/tcanteen.png",
+        image: ["/tcanteen.png", "/tc-1.png", "/tc-2.png", "/tc-3.png", "/tc-4.png", "/tc-5.png"],
         longDesc: "A modern single-page application for ITS campus canteen digitalization, enabling students to browse menus, place orders, and track order status in real-time. Built with Vite + React for fast development and optimized bundle size, featuring component-based architecture and responsive design for mobile-first campus usage.",
         problem: "Campus canteen ordering involves long queues and miscommunication. Students waste time waiting in line, and vendors struggle to manage peak-hour order volume efficiently.",
         features: [
