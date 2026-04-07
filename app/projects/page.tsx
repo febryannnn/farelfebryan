@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { Eye, ExternalLink, Github } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { Eye, ExternalLink, Github, X, ArrowRight } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import Stack from '@/components/Stack';
+import Link from "next/link";
 
 const g = { fontFamily: "var(--font-geist), sans-serif" } as const;
 const gm = { fontFamily: "var(--font-geist-mono), monospace" } as const;
@@ -18,17 +20,38 @@ type Cat = "All" | "Web App" | "AI / ML";
 const filters: Cat[] = ["All", "Web App", "AI / ML"];
 
 const projects = [
-    { id: "01", featured: true, title: "Victoria Property Website", subtitle: "Real Estate Platform", desc: "Modern responsive property listing website with dynamic pages, advanced search and filtering, interactive maps, and optimized performance for seamless user experience.", category: "Web App" as Cat, tags: ["Next.js", "TypeScript", "Tailwind CSS"], year: "2026", views: "8,421",image:"./tcanteen.png" },
-    { id: "02", featured: false, title: "TCanteen Frontend Development", subtitle: "AI Writing Assistant", desc: "Responsive frontend for a smart campus canteen system with real-time interaction and clean UI.", category: "Web App" as Cat, tags: ["Vite", "React"], year: "2025", views: "5,203", image: "./tcanteen.png" },
-    { id: "03", featured: false, title: "AI Route Optimizer for HFFCVRP Website", subtitle: "Image AI Pipeline", desc: "Web-based route optimization system implementing a Hybrid Firefly–Genetic algorithm for cost-efficient vehicle routing.", category: "AI / ML" as Cat, tags: ["Python", "Genetic-Algorithm", "Simulated Annealing", "Tabu-Search"], year: "2025", views: "1,244", image: "./kka.png" },
-    { id: "04", featured: false, title: "Lucretia Fashion Brand Website", subtitle: "Habit Tracker App", desc: "Modern fashion brand website with dynamic catalog and visually refined design.", category: "Web App" as Cat, tags: ["HTML", "CSS", "Javascript"], year: "2025", views: "3,847", image: "./lucretia.png" },
-    { id: "05", featured: false, title: "Pothole Segmentation using SegFormer-b2 (ARA ITS Data Science)", subtitle: "Scaffold Generator", desc: "Deep learning model using SegFormer-b2 for accurate pothole detection and road condition analysis.", category: "AI / ML" as Cat, tags: ["Computer Vision", "PyTorch", "TensorFlow"], year: "2026", views: "2,190", image: "./ara.png" },
+    { id: "08", featured: false, title: "DermaDiff: Improving Skin Lesion Classification of Rare Classes via Targeted Synthetic Augmentation with Latent Diffusion and Vision Foundation Models", subtitle: "AI Skin Analysis", desc: "AI-powered skin condition analysis tool leveraging diffusion models for dermatological assessment and diagnosis support.", category: "AI / ML" as Cat, tags: ["Diffusion Model", "PyTorch", "Computer Vision"], year: "2026", views: "0", image: "./dermadiff-1.png" },
+    { id: "05", featured: false, title: "Pothole Segmentation using SegFormer-b2 (ARA ITS Data Science)", subtitle: "Scaffold Generator", desc: "Deep learning model using SegFormer-b2 for accurate pothole detection and road condition analysis.", category: "AI / ML" as Cat, tags: ["Computer Vision", "PyTorch", "TensorFlow"], year: "2026", views: "2,190", image: "./segformer-2.png" },
+    { id: "09", featured: false, title: "Toxic Comment Classification using RoBerta Large", subtitle: "Scaffold Generator", desc: "Deep learning model using SegFormer-b2 for accurate pothole detection and road condition analysis.", category: "AI / ML" as Cat, tags: ["Computer Vision", "PyTorch", "TensorFlow"], year: "2026", views: "2,190", image: "./roberta.png" },
     { id: "06", featured: false, title: "Customer Segmentation Using KMeans Clustering (Unsupervised Learning)", subtitle: "Portfolio Manager", desc: "KMeans-based clustering to identify customer segments from purchasing behavior data.", category: "AI / ML" as Cat, tags: ["Scikit-Learn", "K-Means"], year: "2025", views: "1,932", image: "./lbe.png" },
-    { id: "07", featured: false, title: "TV Network Classification Using Ensemble Learning (Stacking)", subtitle: "Image AI Pipeline", desc: "Ensemble stacking model for multi-class TV network classification with improved predictive performance.", category: "AI / ML" as Cat, tags: ["Stacking", "Ensemble Learning"], year: "2026", views: "1,244", image:"./kcv.png" },
+    { id: "07", featured: false, title: "TV Network Classification Using Ensemble Learning (Stacking)", subtitle: "Image AI Pipeline", desc: "Ensemble stacking model for multi-class TV network classification with improved predictive performance.", category: "AI / ML" as Cat, tags: ["Stacking", "Ensemble Learning"], year: "2026", views: "1,244", image: "./kcv.png" },
+    { id: "03", featured: false, title: "AI Route Optimizer for HFFCVRP Website", subtitle: "Image AI Pipeline", desc: "Web-based route optimization system implementing a Hybrid Firefly–Genetic algorithm for cost-efficient vehicle routing.", category: "AI / ML" as Cat, tags: ["Python", "Genetic-Algorithm", "Simulated Annealing", "Tabu-Search"], year: "2025", views: "1,244", image: "./kka.png" },
+    { id: "01", featured: false, title: "Victoria Property Website", subtitle: "Real Estate Platform", desc: "Modern responsive property listing website with dynamic pages, advanced search and filtering, interactive maps, and optimized performance for seamless user experience.", category: "Web App" as Cat, tags: ["Next.js", "TypeScript", "Tailwind CSS"], year: "2026", views: "8,421", image: "./property.png" },
+    { id: "02", featured: false, title: "TCanteen Frontend Development", subtitle: "AI Writing Assistant", desc: "Responsive frontend for a smart campus canteen system with real-time interaction and clean UI.", category: "Web App" as Cat, tags: ["Vite", "React"], year: "2025", views: "5,203", image: "./tcanteen.png" },
+    { id: "04", featured: false, title: "Lucretia Fashion Brand Website", subtitle: "Habit Tracker App", desc: "Modern fashion brand website with dynamic catalog and visually refined design.", category: "Web App" as Cat, tags: ["HTML", "CSS", "Javascript"], year: "2025", views: "3,847", image: "./lucretia.png" },
 ];
+
+type Project = (typeof projects)[number];
 
 export default function ProjectsPage() {
     const [active, setActive] = useState<Cat>("All");
+    const [selected, setSelected] = useState<Project | null>(null);
+
+    const close = useCallback(() => setSelected(null), []);
+
+    useEffect(() => {
+        if (!selected) return;
+        const handler = (e: KeyboardEvent) => { if (e.key === "Escape") close(); };
+        document.addEventListener("keydown", handler);
+        return () => document.removeEventListener("keydown", handler);
+    }, [selected, close]);
+
+    useEffect(() => {
+        if (selected) document.body.style.overflow = "hidden";
+        else document.body.style.overflow = "";
+        return () => { document.body.style.overflow = ""; };
+    }, [selected]);
+
     const filtered = active === "All" ? projects : projects.filter(p => p.category === active);
     const featured = filtered.find(p => p.featured);
     const rest = filtered.filter(p => !p.featured);
@@ -69,8 +92,9 @@ export default function ProjectsPage() {
             {/* Featured — proper two-column grid */}
             {featured && (
                 <section
-                    className="grid grid-cols-1 lg:grid-cols-2"
+                    className="grid grid-cols-1 lg:grid-cols-2 cursor-pointer"
                     style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", minHeight: 480 }}
+                    onClick={() => setSelected(featured)}
                 >
                     {/* Left: info */}
                     <div
@@ -164,7 +188,11 @@ export default function ProjectsPage() {
             <section className="px-8 md:px-16 lg:px-24 py-14" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
                 <div className="flex flex-col divide-y" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
                     {rest.map(p => (
-                        <article key={p.id} className="py-8 flex items-start justify-between gap-6 group cursor-pointer">
+                        <article
+                            key={p.id}
+                            onClick={() => setSelected(p)}
+                            className="py-8 flex items-start justify-between gap-6 group cursor-pointer"
+                        >
                             <div className="flex-1 min-w-0">
                                 <p className="text-xs mb-2" style={{ ...gm, color: "rgba(255,255,255,0.22)" }}>{p.year}</p>
                                 <h2 className="font-semibold text-white text-xl mb-1.5 group-hover:text-white/80 transition-colors" style={g}>
@@ -210,6 +238,126 @@ export default function ProjectsPage() {
                 <p style={{ ...gm, fontSize: "11px", color: "rgba(255,255,255,0.18)" }}>© 2024 Farel Febryan · {projects.length} projects</p>
                 <p style={{ ...gm, fontSize: "11px", color: "rgba(255,255,255,0.18)" }}>Made with precision ✦</p>
             </footer>
+
+            {/* Project Detail Modal */}
+            <AnimatePresence>
+                {selected && (
+                    <motion.div
+                        className="fixed inset-0 flex items-center justify-center p-4"
+                        style={{ zIndex: 9999 }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                    >
+                        {/* Backdrop */}
+                        <div
+                            className="absolute inset-0"
+                            style={{ backgroundColor: "rgba(0,0,0,0.75)", backdropFilter: "blur(8px)" }}
+                            onClick={close}
+                        />
+
+                        {/* Modal */}
+                        <motion.div
+                            className="relative w-full max-w-3xl rounded-2xl overflow-hidden overflow-y-auto"
+                            style={{
+                                backgroundColor: "#161616",
+                                border: "1px solid rgba(255,255,255,0.08)",
+                                boxShadow: "0 25px 60px rgba(0,0,0,0.5)",
+                                zIndex: 10000,
+                                maxHeight: "90vh",
+                            }}
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            transition={{ duration: 0.25, ease: "easeOut" }}
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            {/* Image */}
+                            {selected.image ? (
+                                <div className="w-full h-56 md:h-72 overflow-hidden" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                                    <img src={selected.image} alt={selected.title} className="w-full h-full object-cover" />
+                                </div>
+                            ) : (
+                                <div className="w-full h-56 md:h-72 flex items-center justify-center" style={{ backgroundColor: "rgba(255,255,255,0.03)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                                    <span className="text-3xl font-bold" style={{ ...gm, color: "rgba(255,255,255,0.1)" }}>{selected.id}</span>
+                                </div>
+                            )}
+
+                            {/* Close button */}
+                            <button
+                                onClick={close}
+                                className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full transition-colors hover:bg-white/15"
+                                style={{ backgroundColor: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)" }}
+                            >
+                                <X className="w-4 h-4 text-white/70" />
+                            </button>
+
+                            {/* Content */}
+                            <div className="p-6 md:p-8">
+                                <div className="flex items-center gap-3 mb-3">
+                                    <span className="text-[11px]" style={{ ...gm, color: "rgba(255,255,255,0.25)" }}>{selected.id}</span>
+                                    <span className="px-2.5 py-0.5 rounded-md text-[11px]"
+                                        style={{ ...gm, backgroundColor: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.35)" }}>
+                                        {selected.category}
+                                    </span>
+                                    <span className="text-[11px]" style={{ ...gm, color: "rgba(255,255,255,0.2)" }}>{selected.year}</span>
+                                </div>
+
+                                <h3 className="font-bold text-white text-xl md:text-2xl mb-1" style={g}>{selected.title}</h3>
+                                <p className="text-xs tracking-widest uppercase mb-4" style={{ ...gm, color: "rgba(255,255,255,0.25)" }}>
+                                    {selected.subtitle}
+                                </p>
+
+                                <p className="text-sm leading-relaxed mb-5" style={{ ...g, color: "rgba(255,255,255,0.45)" }}>
+                                    {selected.desc}
+                                </p>
+
+                                <div className="flex flex-wrap gap-2 mb-6">
+                                    {selected.tags.map((t, i) => {
+                                        const colors = [
+                                            // Hijau
+                                            { bg: "rgba(34,197,94,0.12)", border: "rgba(34,197,94,0.25)", text: "#4ade80" },
+                                            // Kuning
+                                            { bg: "rgba(234,179,8,0.12)", border: "rgba(234,179,8,0.25)", text: "#facc15" },
+                                            // Biru
+                                            { bg: "rgba(59,130,246,0.12)", border: "rgba(59,130,246,0.25)", text: "#60a5fa" },
+                                        ];
+                                        const c = colors[i % 3];
+                                        return (
+                                            <span key={t} className="px-2.5 py-1 rounded-md text-[11px]"
+                                                style={{ ...gm, backgroundColor: c.bg, border: `1px solid ${c.border}`, color: c.text }}>
+                                                {t}
+                                            </span>
+                                        );
+                                    })}
+                                </div>
+
+                                <div className="flex items-center gap-1.5 text-xs mb-6" style={{ ...gm, color: "rgba(255,255,255,0.22)" }}>
+                                    <Eye className="w-3.5 h-3.5" /> {selected.views} views
+                                </div>
+
+                                {/* Actions */}
+                                <div className="flex items-center gap-3">
+                                    <Link
+                                        href={`/projects/${selected.id}`}
+                                        className="flex items-center gap-2 px-5 py-2.5 text-sm text-white rounded-xl transition-all hover:bg-white/15"
+                                        style={{ ...g, backgroundColor: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.15)" }}
+                                    >
+                                        View Full Details <ArrowRight className="w-3.5 h-3.5" />
+                                    </Link>
+                                    <button
+                                        className="flex items-center gap-2 px-4 py-2.5 text-sm rounded-xl transition-all hover:bg-white/8"
+                                        style={{ ...g, border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.45)" }}
+                                    >
+                                        <Github className="w-3.5 h-3.5" /> Source
+                                    </button>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </main>
     );
 }

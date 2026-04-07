@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Github, Twitter, Linkedin, Mail, ArrowDown } from "lucide-react";
 import ProfileCard from '@/components/ProfileCard';
-import '@/components/ProfileCard.css';
+// import '@/components/ProfileCard.css';
 import { FaCode } from "react-icons/fa";
 import LiquidEther from '@/components/LiquidEther';
 
@@ -114,6 +114,10 @@ function MagneticBtn({ children, href, primary }: { children: React.ReactNode; h
 
 /* ─── Data ─── */
 const services = [
+  {
+    title: "Deep Learning",
+    desc: "Building predictive models and intelligent systems using Python, scikit-learn, and deep learning frameworks to solve real-world problems."
+  },
   {
     title: "Machine Learning",
     desc: "Building predictive models and intelligent systems using Python, scikit-learn, and deep learning frameworks to solve real-world problems."
@@ -270,7 +274,7 @@ export default function HomePage() {
         }
         @media (min-width: 1024px) {
           .services-grid {
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
           }
         }
 
