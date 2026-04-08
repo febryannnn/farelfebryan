@@ -338,8 +338,8 @@ export default function HomePage() {
                 <span style={{ color: "#ededed", textDecoration: "underline", textUnderlineOffset: 3 }}>
                   Informatics Engineering
                 </span>
-                <span className="w-5 h-5 rounded flex items-center justify-center text-xs flex-shrink-0"
-                  style={{ backgroundColor: "rgba(255,255,255,0.12)" }}>✦</span>
+                {/* <span className="w-5 h-5 rounded flex items-center justify-center text-xs flex-shrink-0"
+                  style={{ backgroundColor: "rgba(255,255,255,0.12)" }}>✦</span> */}
               </div>
 
               {/* Headline */}
