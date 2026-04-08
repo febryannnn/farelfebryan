@@ -5,6 +5,8 @@ import { Eye, ExternalLink, Github, X, ArrowRight } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import Stack from '@/components/Stack';
 import Link from "next/link";
+import { projects as projectsData, getThumb, getGallery } from "@/lib/projects";
+
 
 const g = { fontFamily: "var(--font-geist), sans-serif" } as const;
 const gm = { fontFamily: "var(--font-geist-mono), monospace" } as const;
@@ -14,19 +16,19 @@ const images = ["/dermadiff-3.png", "/dermadiff-6.png", "/dermadiff-2.png", "/de
 type Cat = "All" | "Web App" | "AI / ML";
 const filters: Cat[] = ["All", "Web App", "AI / ML"];
 
-const projects = [
-    { id: "08", featured: true, title: "DermaDiff: Improving Skin Lesion Classification of Rare Classes via Targeted Synthetic Augmentation with Latent Diffusion and Vision Foundation Models", subtitle: "AI Skin Analysis", desc: "AI-powered skin condition analysis tool leveraging diffusion models for dermatological assessment and diagnosis support.", category: "AI / ML" as Cat, tags: ["Diffusion Model", "PyTorch", "Computer Vision"], year: "2026", views: "0", image: "./dermadiff-1.png" },
-    { id: "05", featured: false, title: "Pothole Segmentation using SegFormer-b2 (ARA ITS Data Science)", subtitle: "Scaffold Generator", desc: "Deep learning model using SegFormer-b2 for accurate pothole detection and road condition analysis.", category: "AI / ML" as Cat, tags: ["Computer Vision", "PyTorch", "TensorFlow"], year: "2026", views: "2,190", image: "./segformer-2.png" },
-    { id: "09", featured: false, title: "Toxic Comment Classification using RoBerta Large", subtitle: "Scaffold Generator", desc: "Deep learning model using SegFormer-b2 for accurate pothole detection and road condition analysis.", category: "AI / ML" as Cat, tags: ["Computer Vision", "PyTorch", "TensorFlow"], year: "2026", views: "2,190", image: "./roberta.png" },
-    { id: "06", featured: false, title: "Customer Segmentation Using KMeans Clustering (Unsupervised Learning)", subtitle: "Portfolio Manager", desc: "KMeans-based clustering to identify customer segments from purchasing behavior data.", category: "AI / ML" as Cat, tags: ["Scikit-Learn", "K-Means"], year: "2025", views: "1,932", image: "./lbe.png" },
-    { id: "07", featured: false, title: "TV Network Classification Using Ensemble Learning (Stacking)", subtitle: "Image AI Pipeline", desc: "Ensemble stacking model for multi-class TV network classification with improved predictive performance.", category: "AI / ML" as Cat, tags: ["Stacking", "Ensemble Learning"], year: "2026", views: "1,244", image: "./kcv.png" },
-    { id: "03", featured: false, title: "AI Route Optimizer for HFFCVRP Website", subtitle: "Image AI Pipeline", desc: "Web-based route optimization system implementing a Hybrid Firefly–Genetic algorithm for cost-efficient vehicle routing.", category: "AI / ML" as Cat, tags: ["Python", "Genetic-Algorithm", "Simulated Annealing", "Tabu-Search"], year: "2025", views: "1,244", image: "./kka.png" },
-    { id: "01", featured: false, title: "Victoria Property Website", subtitle: "Real Estate Platform", desc: "Modern responsive property listing website with dynamic pages, advanced search and filtering, interactive maps, and optimized performance for seamless user experience.", category: "Web App" as Cat, tags: ["Next.js", "TypeScript", "Tailwind CSS"], year: "2026", views: "8,421", image: "./property.png" },
-    { id: "02", featured: false, title: "TCanteen Frontend Development", subtitle: "AI Writing Assistant", desc: "Responsive frontend for a smart campus canteen system with real-time interaction and clean UI.", category: "Web App" as Cat, tags: ["Vite", "React"], year: "2025", views: "5,203", image: "./tcanteen.png" },
-    { id: "04", featured: false, title: "Lucretia Fashion Brand Website", subtitle: "Habit Tracker App", desc: "Modern fashion brand website with dynamic catalog and visually refined design.", category: "Web App" as Cat, tags: ["HTML", "CSS", "Javascript"], year: "2025", views: "3,847", image: "./lucretia.png" },
-];
+// const projects = [
+//     { id: "08", featured: true, title: "DermaDiff: Improving Skin Lesion Classification of Rare Classes via Targeted Synthetic Augmentation with Latent Diffusion and Vision Foundation Models", subtitle: "AI Skin Analysis", desc: "AI-powered skin condition analysis tool leveraging diffusion models for dermatological assessment and diagnosis support.", category: "AI / ML" as Cat, tags: ["Diffusion Model", "PyTorch", "Computer Vision"], year: "2026", views: "0", image: "./dermadiff-1.png" },
+//     { id: "05", featured: false, title: "Pothole Segmentation using SegFormer-b2 (ARA ITS Data Science)", subtitle: "Scaffold Generator", desc: "Deep learning model using SegFormer-b2 for accurate pothole detection and road condition analysis.", category: "AI / ML" as Cat, tags: ["Computer Vision", "PyTorch", "TensorFlow"], year: "2026", views: "2,190", image: "./segformer-2.png" },
+//     { id: "09", featured: false, title: "Toxic Comment Classification using RoBerta Large", subtitle: "Scaffold Generator", desc: "Deep learning model using SegFormer-b2 for accurate pothole detection and road condition analysis.", category: "AI / ML" as Cat, tags: ["Computer Vision", "PyTorch", "TensorFlow"], year: "2026", views: "2,190", image: "./roberta.png" },
+//     { id: "06", featured: false, title: "Customer Segmentation Using KMeans Clustering (Unsupervised Learning)", subtitle: "Portfolio Manager", desc: "KMeans-based clustering to identify customer segments from purchasing behavior data.", category: "AI / ML" as Cat, tags: ["Scikit-Learn", "K-Means"], year: "2025", views: "1,932", image: "./lbe.png" },
+//     { id: "07", featured: false, title: "TV Network Classification Using Ensemble Learning (Stacking)", subtitle: "Image AI Pipeline", desc: "Ensemble stacking model for multi-class TV network classification with improved predictive performance.", category: "AI / ML" as Cat, tags: ["Stacking", "Ensemble Learning"], year: "2026", views: "1,244", image: "./kcv.png" },
+//     { id: "03", featured: false, title: "AI Route Optimizer for HFFCVRP Website", subtitle: "Image AI Pipeline", desc: "Web-based route optimization system implementing a Hybrid Firefly–Genetic algorithm for cost-efficient vehicle routing.", category: "AI / ML" as Cat, tags: ["Python", "Genetic-Algorithm", "Simulated Annealing", "Tabu-Search"], year: "2025", views: "1,244", image: "./kka.png" },
+//     { id: "01", featured: false, title: "Victoria Property Website", subtitle: "Real Estate Platform", desc: "Modern responsive property listing website with dynamic pages, advanced search and filtering, interactive maps, and optimized performance for seamless user experience.", category: "Web App" as Cat, tags: ["Next.js", "TypeScript", "Tailwind CSS"], year: "2026", views: "8,421", image: "./property.png" },
+//     { id: "02", featured: false, title: "TCanteen Frontend Development", subtitle: "AI Writing Assistant", desc: "Responsive frontend for a smart campus canteen system with real-time interaction and clean UI.", category: "Web App" as Cat, tags: ["Vite", "React"], year: "2025", views: "5,203", image: "./tcanteen.png" },
+//     { id: "04", featured: false, title: "Lucretia Fashion Brand Website", subtitle: "Habit Tracker App", desc: "Modern fashion brand website with dynamic catalog and visually refined design.", category: "Web App" as Cat, tags: ["HTML", "CSS", "Javascript"], year: "2025", views: "3,847", image: "./lucretia.png" },
+// ];
 
-type Project = (typeof projects)[number];
+type Project = (typeof projectsData)[number];
 
 export default function ProjectsPage() {
     const [active, setActive] = useState<Cat>("All");
@@ -47,7 +49,7 @@ export default function ProjectsPage() {
         return () => { document.body.style.overflow = ""; };
     }, [selected]);
 
-    const filtered = active === "All" ? projects : projects.filter(p => p.category === active);
+    const filtered = active === "All" ? projectsData : projectsData.filter(p => p.category === active);
     const featured = filtered.find(p => p.featured);
     const rest = filtered.filter(p => !p.featured);
 
@@ -221,7 +223,7 @@ export default function ProjectsPage() {
                             >
                                 {p.image ? (
                                     <img
-                                        src={p.image}
+                                        src={getThumb(p)}
                                         alt={p.title}
                                         className="w-full h-full object-cover"
                                     />
@@ -235,7 +237,7 @@ export default function ProjectsPage() {
             </section>
 
             <footer className="px-8 md:px-16 lg:px-24 py-6 flex flex-col sm:flex-row items-center justify-between gap-2">
-                <p style={{ ...gm, fontSize: "11px", color: "rgba(255,255,255,0.18)" }}>© 2024 Farel Febryan · {projects.length} projects</p>
+                <p style={{ ...gm, fontSize: "11px", color: "rgba(255,255,255,0.18)" }}>© 2024 Farel Febryan · {projectsData.length} projects</p>
                 <p style={{ ...gm, fontSize: "11px", color: "rgba(255,255,255,0.18)" }}>Made with precision ✦</p>
             </footer>
 
@@ -276,7 +278,7 @@ export default function ProjectsPage() {
                             {/* Image */}
                             {selected.image ? (
                                 <div className="w-full h-56 md:h-72 overflow-hidden" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-                                    <img src={selected.image} alt={selected.title} className="w-full h-full object-cover" />
+                                    <img src={getThumb(selected)} alt={selected.title} className="w-full h-full object-cover" />
                                 </div>
                             ) : (
                                 <div className="w-full h-56 md:h-72 flex items-center justify-center" style={{ backgroundColor: "rgba(255,255,255,0.03)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>

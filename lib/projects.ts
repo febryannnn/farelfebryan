@@ -43,7 +43,7 @@ export interface Project {
 export const projects: Project[] = [
     {
         id: "08",
-        featured: false,
+        featured: true,
         title: "DermaDiff: Improving Skin Lesion Classification of Rare Classes via Targeted Synthetic Augmentation with Latent Diffusion and Vision Foundation Models",
         subtitle: "AI Skin Analysis",
         desc: "AI-powered skin condition analysis tool leveraging diffusion models for dermatological assessment and diagnosis support.",
@@ -177,7 +177,7 @@ export const projects: Project[] = [
         tags: ["Python", "Genetic-Algorithm", "Simulated Annealing", "Tabu-Search"],
         year: "2025",
         views: "1,244",
-        image: ["/ai-2.png", "/kka.png", '/ai-1.png'],
+        image: ["/kka.png", "/ai-2.png", '/ai-1.png'],
         longDesc: "A full-stack web application for solving the Heterogeneous Fixed Fleet Capacitated Vehicle Routing Problem (HFFCVRP) using metaheuristic optimization algorithms. The system compares multiple approaches including Genetic Algorithm, Simulated Annealing, Tabu Search, and a novel Hybrid Firefly–Genetic algorithm to find cost-optimal delivery routes under vehicle capacity constraints.",
         problem: "Logistics companies need to optimize delivery routes across heterogeneous vehicle fleets with varying capacities and costs. Traditional exact methods become computationally intractable for real-world problem sizes.",
         features: [
@@ -245,7 +245,7 @@ export const projects: Project[] = [
         tags: ["HTML", "CSS", "Javascript"],
         year: "2025",
         views: "3,847",
-        image: "/lucretia.png",
+        image: ["/lucretia.png", "/lucretia-1.png", "/lucretia-2.png", "/lucretia-3.png",],
         longDesc: "A visually striking fashion brand website designed with editorial aesthetics, featuring smooth scroll animations, dynamic product catalog with category filtering, and a refined typography system. Built with vanilla HTML, CSS, and JavaScript to demonstrate strong fundamentals in frontend development without framework dependencies.",
         problem: "Fashion brands need web presence that reflects their aesthetic identity. Template-based solutions fail to capture unique brand personality and create forgettable browsing experiences.",
         features: [
