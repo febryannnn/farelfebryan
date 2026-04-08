@@ -9,18 +9,13 @@ import Link from "next/link";
 const g = { fontFamily: "var(--font-geist), sans-serif" } as const;
 const gm = { fontFamily: "var(--font-geist-mono), monospace" } as const;
 
-const images = [
-    "./daftar.png",
-    "./login.png",
-    "./dashboard.png",
-    "./property.png",
-];
+const images = ["/dermadiff-3.png", "/dermadiff-6.png", "/dermadiff-2.png", "/dermadiff-5.png", "/dermadiff-4.png", "/dermadiff-1.png"]
 
 type Cat = "All" | "Web App" | "AI / ML";
 const filters: Cat[] = ["All", "Web App", "AI / ML"];
 
 const projects = [
-    { id: "08", featured: false, title: "DermaDiff: Improving Skin Lesion Classification of Rare Classes via Targeted Synthetic Augmentation with Latent Diffusion and Vision Foundation Models", subtitle: "AI Skin Analysis", desc: "AI-powered skin condition analysis tool leveraging diffusion models for dermatological assessment and diagnosis support.", category: "AI / ML" as Cat, tags: ["Diffusion Model", "PyTorch", "Computer Vision"], year: "2026", views: "0", image: "./dermadiff-1.png" },
+    { id: "08", featured: true, title: "DermaDiff: Improving Skin Lesion Classification of Rare Classes via Targeted Synthetic Augmentation with Latent Diffusion and Vision Foundation Models", subtitle: "AI Skin Analysis", desc: "AI-powered skin condition analysis tool leveraging diffusion models for dermatological assessment and diagnosis support.", category: "AI / ML" as Cat, tags: ["Diffusion Model", "PyTorch", "Computer Vision"], year: "2026", views: "0", image: "./dermadiff-1.png" },
     { id: "05", featured: false, title: "Pothole Segmentation using SegFormer-b2 (ARA ITS Data Science)", subtitle: "Scaffold Generator", desc: "Deep learning model using SegFormer-b2 for accurate pothole detection and road condition analysis.", category: "AI / ML" as Cat, tags: ["Computer Vision", "PyTorch", "TensorFlow"], year: "2026", views: "2,190", image: "./segformer-2.png" },
     { id: "09", featured: false, title: "Toxic Comment Classification using RoBerta Large", subtitle: "Scaffold Generator", desc: "Deep learning model using SegFormer-b2 for accurate pothole detection and road condition analysis.", category: "AI / ML" as Cat, tags: ["Computer Vision", "PyTorch", "TensorFlow"], year: "2026", views: "2,190", image: "./roberta.png" },
     { id: "06", featured: false, title: "Customer Segmentation Using KMeans Clustering (Unsupervised Learning)", subtitle: "Portfolio Manager", desc: "KMeans-based clustering to identify customer segments from purchasing behavior data.", category: "AI / ML" as Cat, tags: ["Scikit-Learn", "K-Means"], year: "2025", views: "1,932", image: "./lbe.png" },
@@ -92,7 +87,7 @@ export default function ProjectsPage() {
             {/* Featured — proper two-column grid */}
             {featured && (
                 <section
-                    className="grid grid-cols-1 lg:grid-cols-2 cursor-pointer"
+                    className="grid grid-cols-1 lg:grid-cols-2"
                     style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", minHeight: 480 }}
                     onClick={() => setSelected(featured)}
                 >
@@ -108,9 +103,14 @@ export default function ProjectsPage() {
                                 Featured
                             </span>
                         </div>
-                        <h2 className="font-bold text-white mb-1"
-                            style={{ ...g, fontSize: "clamp(1.8rem,3.5vw,2.8rem)", lineHeight: 1.1 }}>
-                            {featured.title}
+                        <h2
+                            className="text-white mb-1"
+                            style={{ ...g, fontSize: "clamp(1.4rem,2.5vw,2.2rem)", lineHeight: 1.1 }}
+                        >
+                            <span className="font-bold">DermaDiff:</span>{" "}
+                            <span className="font-normal">
+                                Improving Skin Lesion Classification of Rare Classes via Targeted Synthetic Augmentation with Latent Diffusion and Vision Foundation Models
+                            </span>
                         </h2>
                         <p className="text-xs tracking-widest uppercase mb-5"
                             style={{ ...gm, color: "rgba(255,255,255,0.25)" }}>

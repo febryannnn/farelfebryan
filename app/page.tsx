@@ -116,7 +116,7 @@ function MagneticBtn({ children, href, primary }: { children: React.ReactNode; h
 const services = [
   {
     title: "Deep Learning",
-    desc: "Building predictive models and intelligent systems using Python, scikit-learn, and deep learning frameworks to solve real-world problems."
+    desc: "Developing deep learning models that process large amounts of data to identify patterns, make predictions, and power modern AI applications."
   },
   {
     title: "Machine Learning",

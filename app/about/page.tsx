@@ -23,7 +23,7 @@ const tools = [
 ];
 
 const contacts = [
-    { icon: <Mail className="w-4 h-4" />, label: "Email", val: "farelfebryan06@gmail.com", href: "farelfebryan06@gmail.com" },
+    { icon: <Mail className="w-4 h-4" />, label: "Email", val: "farelfebryan06@gmail.com", href: "mailto:farelfebryan06@gmail.com" },
     { icon: <Github className="w-4 h-4" />, label: "GitHub", val: "febryannnn", href: "https://github.com/febryannnn" },
     { icon: <Linkedin className="w-4 h-4" />, label: "LinkedIn", val: "farelfebryan", href: "https://www.linkedin.com/in/farel-febryan-912184318/" },
     // { icon: <Twitter className="w-4 h-4" />, label: "Twitter / X", val: "@alexreid_dev", href: "https://x.com" },
@@ -74,16 +74,17 @@ export default function AboutPage() {
 
                     <a
                         href="/CV.pdf"
-                        download
-                        className="flex items-center gap-2 px-5 py-2.5 text-sm text-white rounded-xl transition-all hover:bg-white/12 shrink-0"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 px-10 py-2.5 text-sm text-white rounded-xl transition-all hover:bg-white/12 shrink-0"
                         style={{
                             ...g,
                             backgroundColor: "rgba(255,255,255,0.07)",
                             border: "1px solid rgba(255,255,255,0.1)"
                         }}
                     >
-                        <Download className="w-4 h-4" />
-                        Download CV
+                        <Eye className="w-4 h-4" />
+                        View CV
                     </a>
                 </div>
             </section>
