@@ -7,6 +7,7 @@ const links = [
     { href: "/", label: "Home" },
     { href: "/projects", label: "Projects" },
     { href: "/about", label: "About" },
+    { href: "/experience", label: "Experience" },
 ];
 
 const g = { fontFamily: "var(--font-geist), sans-serif" } as const;
