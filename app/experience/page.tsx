@@ -53,7 +53,7 @@ const experiences = [
     {
         id: "03",
         featured: false,
-        title: "ISIF Turkey 2023 — Bronze Medal",
+        title: "Bronze Medal ISIF Teknofest Istanbul 2023",
         subtitle: "International Competition",
         role: "Inventor & Presenter",
         organization: "Istanbul International Inventions Fair",
