@@ -379,10 +379,10 @@ export default function HomePage() {
               {/* Socials */}
               <div className="hero-socials">
                 {[
-                  { icon: <Github className="w-5 h-5" />, href: "https://github.com" },
+                  { icon: <Github className="w-5 h-5" />, href: "https://github.com/febryannnn" },
                   { icon: <Twitter className="w-5 h-5" />, href: "https://x.com" },
-                  { icon: <Linkedin className="w-5 h-5" />, href: "https://linkedin.com" },
-                  { icon: <Mail className="w-5 h-5" />, href: "mailto:farel@dev.id" },
+                  { icon: <Linkedin className="w-5 h-5" />, href: "https://www.linkedin.com/in/farel-febryan-912184318/https://linkedin.com" },
+                  { icon: <Mail className="w-5 h-5" />, href: "mailto:farelfebryan06@gmail.com" },
                 ].map((s, i) => (
                   <a key={i} href={s.href} target="_blank" rel="noopener noreferrer"
                     className="transition-all hover:text-white hover:scale-110"
