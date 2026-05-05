@@ -52,7 +52,7 @@ export const projects: Project[] = [
         year: "2026",
         views: "0",
         image: ["/dermadiff-1.png", "/dermadiff-6.png", "/dermadiff-2.png", "/dermadiff-5.png", "/dermadiff-4.png", "/dermadiff-3.png"],
-        longDesc: "DermaDiff tackles the critical class imbalance problem in dermatological image classification by generating high-quality synthetic dermoscopic images using Stable Diffusion models fine-tuned with LoRA and DoRA adapters. The pipeline targets five minority classes from HAM10000 and ISIC 2019 datasets, melanoma, basal cell carcinoma, actinic keratosis, dermatofibroma, and vascular lesions, and augments training data for a PanDerm (ViT-Large) foundation model classifier. Four experiments were conducted across SD 2.1, SDXL, and SD 3.5 Large, with BiomedCLIP-based quality filtering ensuring only clinically realistic synthetic images enter the training pipeline.",
+        longDesc: "Automated skin lesion classification from dermoscopic images suffers from severe class imbalance, in which diagnostically critical minority classes such as melanoma, a malignant skin cancer for which early detection is essential to patient survival, and dermatofibroma are substantially underrepresented relative to common conditions such as melanocytic nevi.We present DermaDiff, a targeted synthetic augmentation framework that compares four latent diffusion model configurations across three architectures(Stable Diffusion 2.1, Stable Diffusion XL, and Stable Diffusion 3.5 Large) and two parameter-efficient adaptation methods(LoRA and DoRA) to identify the most effective configuration for generating class- specific dermoscopic images for five minority classes.Generated images are directly combined with real data for training a PanDerm ViT - Large classifier.A five - way comparative study on HAM10000 demonstrates that diffusion - based augmentation consistently improves minority class recall, with Stable Diffusion XL DoRA attaining the highest Macro F1(0.847) and Weighted F1(0.897), and SD 3.5 Large yielding the largest melanoma recall gain(+10.8 percentage points).Under cross - domain evaluation on PAD - UFES - 20 dataset(clinical smartphone photographs), Stable Diffusion XL DoRA emerges as the strongest generalizer(accuracy 0.530).Our analysis reveals that generative quality metrics correlate with classification performance: configurations balancing sufficiently low FID with adequately high perceptual diversity(LPIPS) and structural similarity(MS - SSIM) consistently outperform those excelling in only one metric, confirming that stability across fidelity and diversity is a reliable predictor of classification gains.",
         problem: "Skin lesion datasets suffer from severe class imbalance, rare conditions like dermatofibroma and vascular lesions make up less than 2% of training data, causing classifiers to underperform on these critical minority classes. Misdiagnosis of rare but dangerous conditions like melanoma can have life-threatening consequences.",
         features: [
             {
@@ -65,21 +65,20 @@ export const projects: Project[] = [
             },
             {
                 title: "Multi-Model Comparison",
-                desc: "Systematic evaluation across four experiments (Baseline, SD 2.1, SDXL, SD 3.5) with comprehensive metrics including WF1, MF1, and AUC-ROC."
+                desc: "Systematic evaluation across five experiments (Baseline, SD 2.1 LoRA, SDXL LoRA, SD 3.5 LoRA, and SDXL DoRA) with comprehensive metrics including Weighted and Macro F1 also Recall."
             },
         ],
-        techStack: ["PyTorch", "Stable Diffusion", "HuggingFace", "PEFT/LoRA", "DoRA", "Google Colab", "Next.js", "Modal.com"],
+        techStack: ["PyTorch", "Stable Diffusion", "HuggingFace", "diffusers", "PEFT/LoRA", "DoRA", "Google Colab", "Modal.com"],
         results: [
-            { metric: "Weighted F1", baseline: 0.8846, best: 0.8927, experiment: "SD 2.1" },
-            { metric: "Macro F1", baseline: 0.8200, best: 0.8409, experiment: "SDXL" },
-            { metric: "Accuracy", baseline: 0.8750, best: 0.8870, experiment: "SD 3.5" },
+            { metric: "Weighted F1", baseline: 0.8785, best: 0.8972, experiment: "SDXL DoRA" },
+            { metric: "Macro F1", baseline: 0.8114, best: 0.8482, experiment: "SD 3.5 Large" },
+            { metric: "Accuracy", baseline: 0.8756, best: 0.8935, experiment: "SDXL DoRA" },
         ],
         architecture: "/dermadiff-arch-1.png",
         challenges: [
-            "Inverted flow matching formula in SD 3.5 custom training loop caused silent training failure, caught only after analyzing generated outputs.",
-            "PEFT format incompatibility between training and inference required switching to native PeftModel loading pattern via PeftModel.from_pretrained().",
-            "Drive I/O bottleneck during PanDerm training resolved by copying dataset to local disk before training.",
             "Class-specific negative prompts were essential to prevent mode collapse in minority class generation.",
+            "Generating more than 1x ratio have not result in better classification, so that using generative ai to create new dataset are not completely handle the imbalanced data",
+            "Fine-Tuning Stable Diffusion 3.5 Large with LoRA for around 35.000 dermascopic images require heavy computation",
         ],
         links: {
             demo: "https://dermadiff-website.vercel.app",
@@ -98,8 +97,8 @@ export const projects: Project[] = [
         year: "2026",
         views: "2,190",
         image: ["/segformer.png", "/ara-1.png", "/ara.png", "/ara-2.png", "/segformer-2.png"],
-        longDesc: "This project implements a state-of-the-art semantic segmentation pipeline using SegFormer-b2 architecture for automated pothole detection from road imagery. Trained on a curated dataset of Indonesian road conditions collected by ARA ITS, the model achieves high IoU scores on both validation and test sets. The pipeline includes custom data augmentation strategies, class-weighted loss functions to handle imbalanced segmentation masks, and a post-processing module for contour refinement.",
-        problem: "Indonesian road infrastructure suffers from widespread pothole damage that causes vehicle damage and traffic accidents. Manual road inspection is time-consuming and inconsistent, creating a need for automated detection systems.",
+        longDesc: "This project presents a deep learning pipeline for automated pothole detection using semantic segmentation with the SegFormer-B2 architecture. The model is trained on a custom road dataset with carefully paired images and masks to ensure data consistency.\n\nTo improve generalization, the pipeline applies extensive data augmentation including flipping, brightness adjustment, and geometric transformations. A hybrid loss function combining Binary Cross Entropy and Dice Loss is used to handle class imbalance and improve detection of small pothole regions.\n\nThe system leverages pretrained transformers for efficient training, applies threshold tuning and test-time augmentation during inference, and includes post-processing to remove noise. Final predictions are encoded in RLE format, making the pipeline suitable for real-world deployment and evaluation.",
+        problem: "Road infrastructure damage, particularly potholes, is a significant issue in Indonesia, leading to vehicle damage, increased maintenance costs, and traffic safety risks. Traditional manual inspection methods are time-consuming, labor-intensive, and often inconsistent. This project addresses the need for an automated, scalable, and accurate detection system by leveraging computer vision and deep learning techniques to identify potholes directly from road imagery.",
         features: [
             { title: "SegFormer-b2 Architecture", desc: "Hierarchical transformer encoder with lightweight MLP decoder for efficient semantic segmentation." },
             { title: "Custom Augmentation", desc: "Road-specific augmentation pipeline including perspective transforms, weather simulation, and lighting variation." },
@@ -115,14 +114,14 @@ export const projects: Project[] = [
     {
         id: "11",
         featured: false,
-        title: "myPelindo: One Gate Customer Portal with Retrieval-Augmented Generation (RAG) AI for Integrated Logistics Services",
+        title: "myPelindo: One Gate Customer Portal with Retrieval-Augmented Generation (RAG) AI for Integrated Logistics Services (ICON 3.0)",
         subtitle: "AI-Powered Logistics Platform",
         desc: "Unified logistics service portal enhanced with Retrieval-Augmented Generation (RAG) to provide intelligent assistance, automation, and real-time decision support.",
         category: "AI / ML",
         tags: ["RAG", "LLM", "System Integration", "API Gateway", "Cloud"],
         year: "2026",
         views: "0",
-        image: ["/pelindo-3.png", "/rag-1.jpeg", "/rag.jpeg", "/pelindo-0.png", "/pelindo-1.png", "/pelindo-2.png", "/pelindo-4.png"],
+        image: ["/pelindo-3.png", "/miro.png", "/rag-1.jpeg", "/rag.jpeg", "/pelindo-0.png", "/pelindo-1.png", "/pelindo-2.png", "/pelindo-4.png"],
         longDesc: "myPelindo RAG is an intelligent One Gate Customer Portal designed to integrate fragmented logistics services across Pelindo subholdings into a unified digital platform. Leveraging Retrieval-Augmented Generation (RAG), the system provides a smart logistics assistant capable of understanding user queries, retrieving relevant operational data, and generating context-aware responses. The platform integrates multiple legacy systems such as Phinnisi, Palapa, Maleo, and Praya through an API Gateway, while utilizing vector databases and LLMs to deliver intelligent recommendations, document guidance, and real-time operational insights.",
         problem: "Post-merger Pelindo systems remain fragmented across multiple portals, billing systems, and operational platforms, leading to inefficient workflows, lack of data integration, and poor customer experience. Additionally, users—especially new exporters—struggle with complex documentation and logistics procedures without intelligent guidance.  [oai_citation:0‡Copy of Proposal ICON 3.0 One Gate Customer Portal.pdf](sediment://file_000000005bc8720ba2cb0ed3755e6e7e)",
         features: [
@@ -144,15 +143,17 @@ export const projects: Project[] = [
             }
         ],
         techStack: [
-            "Next.js",
-            "Node.js",
             "Python",
-            "LangChain / RAG Pipeline",
-            "Vector Database",
-            "LLM",
-            "Docker",
-            "Cloud Infrastructure",
-            "API Gateway"
+            "Flask",
+            "LangChain (RAG Pipeline)",
+            "LLM (Gemini)",
+            "ChromaDB (Vector Database)",
+            "FAISS (Similarity Search)",
+            "HuggingFace Transformers",
+            "ONNX Runtime",
+            "SQLAlchemy",
+            "NLTK",
+            "REST API (HTTPX / Requests)"
         ],
         // results: [
         //     { metric: "Workflow Efficiency", improvement: "+30%" },
@@ -175,7 +176,7 @@ export const projects: Project[] = [
     {
         id: "12",
         featured: false,
-        title: "ISPU Pollutant Forecasting with Chronos-T5-Small Foundation Model",
+        title: "ISPU Pollutant Forecasting with Chronos-T5-Small Foundation Model (Datavidia)",
         subtitle: "Environmental Intelligence System",
         desc: "AI-powered air quality monitoring and forecasting platform using Chronos foundation model for time series prediction.",
         category: "AI / ML",
@@ -191,17 +192,9 @@ export const projects: Project[] = [
                 desc: "Utilizes Chronos time series foundation model for accurate multi-step air quality prediction across multiple pollutant indicators."
             },
             {
-                title: "Real-time ISPU Monitoring",
-                desc: "Displays current air quality levels based on key pollutant indicators such as PM2.5, PM10, CO, NO2, and SO2."
-            },
-            {
                 title: "Multi-Variable Analysis",
                 desc: "Analyzes relationships between multiple pollutants to understand contributing factors to air quality changes."
             },
-            {
-                title: "Interactive Visualization",
-                desc: "Dynamic dashboards for exploring historical trends and future forecasts."
-            }
         ],
         techStack: [
             "Python",
@@ -285,8 +278,8 @@ export const projects: Project[] = [
         ],
         techStack: ["Python", "TF-IDF", "KeyBERT", "BERT"],
         links: {
-            demo: null,
-            github: null,
+            demo: "https://medium.com/@farelfebryan06/identifying-game-identity-from-user-reviews-using-tf-idf-and-keybert-9bfbea6b31d1?postPublishedType=repub",
+            github: "https://medium.com/@farelfebryan06/identifying-game-identity-from-user-reviews-using-tf-idf-and-keybert-9bfbea6b31d1?postPublishedType=repub",
             paper: "https://medium.com/@farelfebryan06/identifying-game-identity-from-user-reviews-using-tf-idf-and-keybert-9bfbea6b31d1"
         }
     },
@@ -325,7 +318,7 @@ export const projects: Project[] = [
         tags: ["Scikit-Learn", "K-Means"],
         year: "2025",
         views: "1,932",
-        image: "/lbe.png",
+        image: ["/lbe.png", "/lbe-3.png", "/lbe-1.png", "/lbe-2.png"],
         longDesc: "An unsupervised machine learning project that segments customers based on purchasing patterns, demographics, and behavioral features using KMeans clustering. The pipeline includes comprehensive EDA, feature engineering, PCA dimensionality reduction for visualization, and silhouette analysis for optimal cluster selection.",
         problem: "Businesses need to understand their diverse customer base to tailor marketing strategies, but manually categorizing thousands of customers is impractical and subjective.",
         features: [
@@ -367,7 +360,7 @@ export const projects: Project[] = [
         tags: ["Next.js", "TypeScript", "Tailwind CSS"],
         year: "2026",
         views: "8,421",
-        image: ["/property.png", "/daftar.png", "/login.png", "/dashboard.png"],
+        image: ["/property.png", "/daftar.png", "/login.png", "/dashboard.png", "/vp-1.png", "/vp-2.png"],
         longDesc: "A full-featured real estate platform built with Next.js App Router featuring server-side rendering, dynamic property detail pages, advanced multi-criteria search with filtering by price, location, property type, and amenities. Includes interactive map integration for location-based browsing, responsive image galleries, and performance optimization with ISR and image lazy loading.",
         problem: "Traditional property listing sites suffer from slow page loads, poor mobile experience, and limited search capabilities that frustrate potential buyers browsing hundreds of listings.",
         features: [
@@ -376,8 +369,8 @@ export const projects: Project[] = [
             { title: "Interactive Map", desc: "Location-based property browsing with clustered markers and boundary-based search on interactive map." },
             { title: "Responsive Gallery", desc: "Touch-friendly image carousel with lightbox, lazy loading, and optimized image delivery." },
         ],
-        techStack: ["Next.js", "TypeScript", "Tailwind CSS", "Prisma", "PostgreSQL"],
-        links: { demo: null, github: null, paper: null },
+        techStack: ["Next.js", "TypeScript", "Tailwind CSS", "Golang", "Gin Framework", "MySQL"],
+        links: { demo: "https://victoria-property-frontend-igi8.vercel.app/", github: null, paper: null },
     },
     {
         id: "02",
@@ -419,7 +412,7 @@ export const projects: Project[] = [
             { title: "Dynamic Catalog", desc: "Product grid with category filtering, quick-view functionality, and responsive image galleries." },
         ],
         techStack: ["HTML5", "CSS3", "JavaScript", "GSAP"],
-        links: { demo: null, github: null, paper: null },
+        links: { demo: "https://felucretia.com", github: null, paper: null },
     }
 ];
 
