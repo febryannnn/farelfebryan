@@ -403,7 +403,7 @@ export default function HomePage() {
                     Informatics Student
                   </span>
                 }
-                handle="javicodes"
+                handle="farelfebryan"
                 status="Online"
                 contactText="Contact Me"
                 avatarUrl="/profile.jpeg"
