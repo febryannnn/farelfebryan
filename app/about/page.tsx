@@ -9,11 +9,14 @@ const gs = { fontFamily: "var(--font-script), cursive" } as const;
 
 const experience = [
     { role: "Data Structure Teaching Assistant", company: "ITS", location: "Surabaya", period: "2026 — Present", current: true },
+    { role: "KCV Lab Administrator", company: "ITS", location: "Surabaya", period: "2026 — Present", current: true },
     { role: "Staff External Affairs", company: "HMTC", location: "Surabaya", period: "2026 — Present", current: true },
     { role: "Numerical Computing Teaching Assistant", company: "ITS", location: "Surabaya", period: "2026 — Present", current: true },
-    { role: "IT Support & Data Administrator SPMB Jawa Timur 2026", company: "Dinas Pendidikan Provinsi", location: "Surabaya, Jawa Timur", period: "2026 — Present", current: true },
+    { role: "Database Administrator SPMB Jawa Timur 2026", company: "Dinas Pendidikan Provinsi", location: "Surabaya, Jawa Timur", period: "2026 — Present", current: true },
     { role: "Digital Marketing Staff", company: "PT. Wahana Supra Sinergi", location: "Remote Work", period: "2025 — Present", current: true },
+    { role: "PKT Lab Research Assistant", company: "ITS", location: "Surabaya", period: "2026", current: false },
     { role: "Linear Algebra Teaching Assistant", company: "ITS", location: "Surabaya", period: "2025", current: false },
+
 
 ];
 

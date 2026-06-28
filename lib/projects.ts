@@ -1,5 +1,5 @@
 // lib/projects.ts
-export type Cat = "All" | "Web App" | "AI / ML";
+export type Cat = "All" | "Web App" | "AI / ML" | "Data Analytics";
 
 export interface Feature {
     title: string;
@@ -371,6 +371,59 @@ export const projects: Project[] = [
         ],
         techStack: ["Next.js", "TypeScript", "Tailwind CSS", "Golang", "Gin Framework", "MySQL"],
         links: { demo: "https://victoria-property-frontend-igi8.vercel.app/", github: null, paper: null },
+    }, {
+        id: "17",
+        featured: false,
+        title: "Real Time Data Analytics using Apache Airflow, ClickHouse and Metabase",
+        subtitle: "Data Analytics",
+        desc: "Real-time data analytics pipeline using Apache Airflow for workflow orchestration and automated data processing.",
+        category: "Data Analytics",
+        tags: ["Apache Airflow", "Python", "ETL"],
+        year: "2025",
+        views: "3,847",
+        image: ["/apace-2.png", "/apache-1.png", "/apache-4.png", "/pipeline-apache.png", "/apache-5.png", "/apache-7.png"],
+        longDesc: "A real-time data analytics project designed to automate data collection, transformation, and analysis using Apache Airflow. The system orchestrates scheduled workflows, processes incoming data through ETL pipelines, and prepares analytics-ready datasets for monitoring and decision-making. This project demonstrates workflow automation, data pipeline management, and practical implementation of modern data engineering concepts.",
+        problem: "Organizations often need timely insights from continuously generated data, but manual data processing is inefficient, error-prone, and difficult to scale. A structured workflow orchestration system is needed to automate data pipelines and ensure reliable analytics delivery.",
+        features: [
+            { title: "Workflow Orchestration", desc: "Automated data pipeline scheduling and task dependency management using Apache Airflow DAGs." },
+            { title: "ETL Pipeline", desc: "Data extraction, transformation, and loading process to prepare clean and structured analytics data." },
+            { title: "Real-Time Monitoring", desc: "Pipeline execution monitoring to track task status, detect failures, and ensure reliable data processing." },
+        ],
+        techStack: ["Apache Airflow", "Python", "Pandas", "PostgreSQL"],
+        links: { demo: null, github: null, paper: null },
+    },
+    {
+        id: "18",
+        featured: false,
+        title: "Internship Scam Detection with TabM Ensemble MLP",
+        subtitle: "Machine Learning",
+        desc: "A machine learning project for detecting fake internship postings using TabM, Logistic Regression, and CatBoost models.",
+        category: "AI / ML",
+        tags: ["TabM", "Machine Learning", "Classification"],
+        year: "2026",
+        views: "3,847",
+        image: [
+            "/tabm-1.png",
+            "/tabm.png",
+        ],
+        longDesc: "A machine learning project focused on detecting fake internship postings using tabular classification models. The project compares Logistic Regression, CatBoost, and TabM, an ensemble MLP-based deep learning model for tabular data. The system processes internship posting data, handles categorical and numerical features, applies preprocessing scenarios such as scaling and feature selection, and evaluates model performance using accuracy, precision, recall, F1-score, ROC-AUC, and confusion matrix.",
+        problem: "Online internship platforms make it easier for students and job seekers to find opportunities, but they also create risks of fake postings. Scam internships may include suspicious email domains, unclear job descriptions, unrealistic offers, payment requests, and low trust signals. A reliable classification model is needed to help identify potentially fraudulent internship postings.",
+        features: [
+            {
+                title: "Scam Internship Classification",
+                desc: "Classifies internship postings into real or fake categories using supervised machine learning models."
+            },
+            {
+                title: "TabM Ensemble MLP Model",
+                desc: "Implements TabM as a deep learning approach for tabular data using an ensemble MLP-based architecture."
+            },
+            {
+                title: "Model Performance Comparison",
+                desc: "Compares Logistic Regression, CatBoost, and TabM across baseline, scaling, feature selection, and combined preprocessing scenarios."
+            },
+        ],
+        techStack: ["Python", "Scikit-learn", "CatBoost", "PyTorch", "TabM", "Pandas"],
+        links: { demo: null, github: null, paper: null },
     },
     {
         id: "02",
