@@ -406,16 +406,17 @@ export default function HomePage() {
                 handle="farelfebryan"
                 status="Online"
                 contactText="Contact Me"
-                avatarUrl="/profile.jpg"
+                avatarUrl="/profile.JPG"
                 showUserInfo
                 enableTilt={true}
                 enableMobileTilt={false}
-                onContactClick={() => console.log('Contact clicked')}
-                behindGlowColor="rgba(125, 190, 255, 0.67)"
+                onContactClick={() => console.log("Contact clicked")}
+                behindGlowColor="rgba(148, 198, 255, 0.67)"
                 iconUrl="/profile.jpg"
                 grainUrl="./grain.jpg"
                 behindGlowEnabled
                 innerGradient="linear-gradient(145deg,#60496e8c 0%,#71C4FF44 100%)"
+                className="farel-profile-card"
               />
             </div>
           </div>
