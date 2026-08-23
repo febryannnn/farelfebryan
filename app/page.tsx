@@ -406,7 +406,7 @@ export default function HomePage() {
                 handle="farelfebryan"
                 status="Online"
                 contactText="Contact Me"
-                avatarUrl="/profile.jpeg"
+                avatarUrl="/profile.jpg"
                 showUserInfo
                 enableTilt={true}
                 enableMobileTilt={false}
